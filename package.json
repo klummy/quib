@@ -1,6 +1,6 @@
 {
   "name": "quib",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "main": "dist/quib.cjs.js",
   "module": "dist/quib.esm.js",
   "browser": "dist/quib.umd.js",
