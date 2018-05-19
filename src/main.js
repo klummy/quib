@@ -1,7 +1,7 @@
 const queryBuilder = ({
-	name
+  name
 }) => {
-	return name
+  return name
 }
 
 export default queryBuilder
