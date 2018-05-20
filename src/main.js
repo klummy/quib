@@ -49,6 +49,8 @@ const validateProps = (props) => {
  * @returns {String} Composed arguments
  */
 const composeArgs = (args) => {
+  if (!args) return ''
+
   const composedArgs = []
 
   Object.keys(args).forEach(arg => {
@@ -57,7 +59,7 @@ const composeArgs = (args) => {
 
   return composedArgs.length > 0
     // ? `(${composedArgs.join(', ')})`
-    ? `(${composedArgs.toString()})`
+    ? ` (${composedArgs.toString()})`
     : ''
 }
 
@@ -70,10 +72,8 @@ const stringifyField = (fields) => {
   const composedFields = []
 
   Object.keys(fields).forEach(field => {
-    // If array, get the first item in the array as the prop and use that to recall the function
-    if (Array.isArray(field)) {
-      composedFields.push(`${field} {${stringifyField(fields[field][0])}}`)
-    } else if (typeof fields[field] === 'object' && fields[field] !== null) {
+    // If field is an object, recursively call the stringifyField function with the object to get the nested items
+    if (typeof fields[field] === 'object' && fields[field] !== null) {
       composedFields.push(`${field} {${stringifyField(fields[field])}}`)
     } else {
       composedFields.push(field)
@@ -107,7 +107,7 @@ const composeQuery = (props) => {
   const queryFields = response || schema
 
   return `{
-    ${name} ${composeArgs(args)} {
+    ${name}${composeArgs(args)} {
       ${composeFields(queryFields)}
     }
   }`
