@@ -3,8 +3,8 @@
 Quib allows you to build GraphQL queries using plain JavaScript objects.
 
 [![NPM version](https://img.shields.io/npm/v/quib.svg)](https://www.npmjs.com/package/quib)
-[![Build Status](https://travis-ci.org/klummy/quib.js.svg?branch=master)](https://travis-ci.org/klummy/quib.js)
-[![Coverage Status](https://coveralls.io/repos/klummy/quib.js/badge.svg?branch=master)](https://coveralls.io/r/klummy/quib.js?branch=master)
+[![Build Status](https://travis-ci.org/klummy/quib.svg?branch=master)](https://travis-ci.org/klummy/quib)
+[![Coverage Status](https://coveralls.io/repos/klummy/quib/badge.svg?branch=master)](https://coveralls.io/r/klummy/quib?branch=master)
 
 - [Description](#description)
 - [Installation](#installation)
