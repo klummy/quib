@@ -103,11 +103,9 @@ const composeQuery = (schema, options) => {
   let query = ''
 
   Object.keys(schema).forEach(schemaItem => {
-    query += `
-      ${schemaItem}${composeArgs(args, schemaItem)} {
-        ${composeFields(schema[schemaItem])}
-      }
-    `
+    query += `${schemaItem}${composeArgs(args, schemaItem)} {
+      ${composeFields(schema[schemaItem])}
+    }`
   })
 
   return `{

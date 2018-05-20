@@ -3,26 +3,10 @@ import constants from '../src/constants'
 import quib from '../dist/quib'
 
 describe('quib', () => {
-  it('Throws an error if no props are provided', () => {
-    expect(() => {
-      quib()
-    }).toThrowError(constants.PROJECT_NAMESPACE + 'No prop argument passed')
-  })
-
-  it('Throws the right error if no name is provided', () => {
-    expect(() => {
-      quib({
-
-      })
-    }).toThrowError(constants.PROJECT_NAMESPACE + 'The query name is required')
-  })
-
   it('Throws the right error if no schema is provided', () => {
     expect(() => {
-      quib({
-        name: 'myQuery'
-      })
-    }).toThrowError(constants.PROJECT_NAMESPACE + 'The query schema is required')
+      quib()
+    }).toThrowError(constants.PROJECT_NAMESPACE + constants.MESSAGES.EMPTY_SCHEMA)
   })
 
   it('Returns the expected formatted GraphQL query when a simple schema is passed', () => {
@@ -33,8 +17,7 @@ describe('quib', () => {
   }`
 
     const quibFormat = quib({
-      name: 'getName',
-      schema: {
+      getName: {
         id: '',
         name: ''
       }
@@ -51,8 +34,7 @@ describe('quib', () => {
   }`
 
     const quibFormat = quib({
-      name: 'getName',
-      schema: {
+      getName: {
         details: {
           levelTwo: '',
           moreDetails: {
@@ -69,22 +51,64 @@ describe('quib', () => {
     expect(quibFormat).toBe(expectedFormat)
   })
 
-  it('Returns the expected formatted GraphQL query with variables when arguments are passed', () => {
+  it('Returns the expected formatted GraphQL query when multiple objects are passed as the schema', () => {
     const expectedFormat = `{
-    getName (color:"red",id:451) {
-      id,name
+    getAllArtists {
+      artist {name,power}
+    }queryArtists {
+      id,image,name
     }
   }`
 
     const quibFormat = quib({
-      args: {
-        color: 'red',
-        id: 451
+      getAllArtists: {
+        artist: {
+          name: '',
+          power: false
+        }
       },
-      name: 'getName',
-      schema: {
+
+      queryArtists: {
         id: '',
+        image: '',
         name: ''
+      }
+    })
+
+    expect(quibFormat).toBe(expectedFormat)
+  })
+
+  it('Returns the expected formatted GraphQL query with variables when arguments are passed', () => {
+    const expectedFormat = `{
+    getAllArtists (limit:10) {
+      artist {name,power}
+    }queryArtists (name:"My name") {
+      id,image,name
+    }
+  }`
+
+    const quibFormat = quib({
+      getAllArtists: {
+        artist: {
+          name: '',
+          power: false
+        }
+      },
+
+      queryArtists: {
+        id: '',
+        image: '',
+        name: ''
+      }
+    }, {
+      args: {
+        getAllArtists: {
+          limit: 10
+        },
+
+        queryArtists: {
+          name: 'My name'
+        }
       }
     })
 

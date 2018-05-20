@@ -1,6 +1,6 @@
 export default {
   MESSAGES: {
-    EMPTY_SCHEMA: 'No query schema found'
+    EMPTY_SCHEMA: 'Query schema not passed.'
   },
 
   PROJECT_NAMESPACE: '[Quib] '
