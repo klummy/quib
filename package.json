@@ -32,7 +32,8 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "pretest": "npm run build",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prepublishOnly": "yarn lint && yarn test && yarn build"
   },
   "files": [
     "dist"
