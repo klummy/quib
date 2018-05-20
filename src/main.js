@@ -1,12 +1,8 @@
 import constants from './constants'
 
 /**
- * @typedef {Object} QueryProps
- * @property {Object} args [Optional] Query arguments
- * @property {String} name [Required] The name of the query
- * @property {Object} options [Optional] Query options
- * @property {Object} response [Optional] Subset of schema to return
- * @property {Object} schema [Required] Query schema
+ * @typedef {Object} QueryOptions
+ * @property {Object} args Query arguments
  */
 
 /**
@@ -26,39 +22,44 @@ const validationResponse = (msg) => ({
 })
 
 /**
- * Validate the passed props to ensure that all properties are as expected
- * @param {...QueryProps} props Query parameters
+ * Validate query schema
+ * @param {Object} schema Query schema
  * @returns {ValidationResponse} ValidationResponse
  */
-const validateProps = (props) => {
-  // Ensure props are passed
-  if (!props) return validationResponse('No prop argument passed')
-
-  // Validate required props
-  if (!props.name) return validationResponse('The query name is required')
-  if (!props.schema) return validationResponse('The query schema is required')
-
-  // TODO: Validate optional params
+const validateSchema = (schema) => {
+  if (!schema) return validationResponse(constants.MESSAGES.EMPTY_SCHEMA)
 
   return validationResponse()
 }
 
 /**
- * Composes the arguments for a given query
- * @param {Object} args Query arguments
- * @returns {String} Composed arguments
+ * Validate the passed props to ensure that all properties are as expected
+ * @param {...QueryOptions} options Query options
+ * @param {Object} schema Query schema
+ * @returns {ValidationResponse} ValidationResponse
  */
-const composeArgs = (args) => {
-  if (!args) return ''
+const validateOptions = (options, schema) => {
+  return validationResponse()
+}
+
+/**
+ * Composes the arguments for a given query
+ * @param {Object} args All query arguments
+ * @param {String} specificSchema The schema key name to get the args from
+ * @returns {String} Composed arguments for the schema
+ */
+const composeArgs = (args, specificSchema) => {
+  if (!args || !args[specificSchema]) return ''
+
+  const argsForSchema = args[specificSchema]
 
   const composedArgs = []
 
-  Object.keys(args).forEach(arg => {
-    composedArgs.push(`${arg}:${JSON.stringify(args[arg])}`)
+  Object.keys(argsForSchema).forEach(arg => {
+    composedArgs.push(`${arg}:${JSON.stringify(argsForSchema[arg])}`)
   })
 
   return composedArgs.length > 0
-    // ? `(${composedArgs.join(', ')})`
     ? ` (${composedArgs.toString()})`
     : ''
 }
@@ -91,41 +92,45 @@ const stringifyField = (fields) => {
 const composeFields = (fields) => stringifyField(fields)
 
 /**
- * Compose a GraphQL using the passed parameters
- * @param {...QueryProps} props props
+ * Compose a GraphQL query using the passed schema and options
+ * @param {Object} schema Query schema
+ * @param {...QueryOptions} options Optional query options
  * @returns {String} Compiled query
  */
-const composeQuery = (props) => {
-  const {
-    args,
-    name,
-    response,
-    schema
-  } = props
+const composeQuery = (schema, options) => {
+  const args = options && options.args
 
-  // Compose the query using the specified response or the entire schema
-  const queryFields = response || schema
+  let query = ''
+
+  Object.keys(schema).forEach(schemaItem => {
+    query += `${schemaItem}${composeArgs(args, schemaItem)} {
+      ${composeFields(schema[schemaItem])}
+    }`
+  })
 
   return `{
-    ${name}${composeArgs(args)} {
-      ${composeFields(queryFields)}
-    }
+    ${query}
   }`
 }
 
 /**
  * Validate and create a GraphQL query using the passed parameters
- * @param {...QueryProps} props Query parameters
+ * @param {Object} schema Query schema
+ * @param {...QueryOptions} options Optional query option
  * @returns {String} Compiled query
  */
-const quib = (props) => {
-  const validProps = validateProps(props)
-
-  if (!validProps.valid) {
-    throw new Error(validProps.message)
+const quib = (schema, options) => {
+  const validSchema = validateSchema(schema)
+  if (!validSchema.valid) {
+    throw new Error(validSchema.message)
   }
 
-  return composeQuery(props)
+  const validOptions = validateOptions(options)
+  if (!validOptions.valid) {
+    throw new Error(validOptions.message)
+  }
+
+  return composeQuery(schema, options)
 }
 
 export default quib
