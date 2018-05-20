@@ -1,5 +1,7 @@
 # Quib
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/klummy/quib.svg)](https://greenkeeper.io/)
+
 Quib allows you to build GraphQL queries using plain JavaScript objects.
 
 [![NPM version](https://img.shields.io/npm/v/quib.svg)](https://www.npmjs.com/package/quib)
