@@ -10,14 +10,17 @@
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.47",
+    "@babel/plugin-external-helpers": "7.0.0-beta.47",
     "@babel/preset-env": "^7.0.0-beta.47",
-    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-core": "^7.0.0-0",
+    "babel-jest": "^22.4.4",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.1.0",
+    "jest": "^22.4.4",
     "rollup": "^0.59.0",
     "rollup-plugin-babel": "^4.0.0-beta.4",
     "rollup-plugin-commonjs": "^9.1.0",
@@ -26,8 +29,10 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "test": "node test/test.js",
-    "pretest": "npm run build"
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "pretest": "npm run build",
+    "lint": "eslint ."
   },
   "files": [
     "dist"
