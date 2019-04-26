@@ -9,7 +9,7 @@
     "name": "Yekeen Ajeigbe"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.47",
+    "@babel/core": "^7.4.4",
     "@babel/plugin-external-helpers": "7.0.0-beta.52",
     "@babel/preset-env": "^7.0.0-beta.47",
     "babel-core": "^7.0.0-0",
